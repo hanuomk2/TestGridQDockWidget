@@ -1,0 +1,64 @@
+#+TITLE:	README for TestGridQDockWidget
+#+AUTHOR:	hanuomk2(odaba)
+#+DATE:		2021-02-16
+
+* TestGridQDockWidget(Exifデータ対応)
+
+Qt(C++)による、フォルダ内の画像ファイルをリスト表示し、
+リストから選択した画像を拡大表示するよくあるビューアです
+以下の特徴があります
+
+- QDockWidgetにQListWidgetを配置(QDockWidgetのフローティングが可能)
+- QListWidgetとQGraphicsViewをカスタムクラス化し、ドラッグ&ドロップが可能
+- jpegファイルでExifデータにサムネイル画像がある場合、QListWidgetのカスタムクラスにサムネイル画像を表示
+- QGraphicsViewのカスタムクラスではQTouchEventによるピンチ操作に対応 
+
+** 謝辞
+
+[[http://dsas.blog.klab.org/archives/52123322.html][Klab DSAS開発者の部屋: Exif データにアクセスするコードを自作してみる]]
+にて、公開されているソースコードを移植しました
+[[https://doc.qt.io/qt-6/qtwidgets-touch-pinchzoom-example.html][Pinch Zoom Example]]
+にて、公開されているソースコードを基にピンチ操作部分を作成しました
+(The Qt Company製作のソースコードが含まれます)
+
+多数の先人の方々のご好意で本コードを公開できました。本当にありがとうございます。
+
+** 環境
+
+ - OS: 		macOS Catlina バージョン10.15.6
+ - IDE: 	QtCreator 4.12.4 
+ - Qt(Ver.):Qt 5.14.2(Clang 10.0 (Apple) 64 bit)
+
+** 使い方
+
+適当なフォルダにzipファイルを展開し、
+Qt Creatorで"TestGridQDockWidget.pro"ファイルを開き、実行して下さい。
+(プロジェクト名がそぐわないですが、気にしないで下さい)
+
+** ライセンス
+
+Apache License 2.0
+(基本的にApache Licenseですが、The Qt Company製作のソースコードが含まれるため、
+ その旨記載して下さい。もちろん、コンパイルして再配布する場合、
+ ライブラリ等Qtの部分はLGPL 3.0となります)
+
+** その他
+
+に記載の通り、QGraphicsSceneを使用しているので、
+   dragMoveEvent, dragLeaveもオーバーロードしています
+   参照:[[https://sites.google.com/site/qoopazero/home/qt/graphicsview_dropevent][QGraphicsViewのdropEventを使う]]
+        (ありがとうございます)
+ 
+ - qimagerotatetoqpixmap.h
+   QImage画像を回転させQPixmap画像をコンバートする処理は
+   customlistwidget.h, customview.hの両方使用しているので
+   一つにまとめました(ExifデータのOrientation情報を基に画像の向きを正しています)
+
+ - mainwindow.h mainwindow.cpp
+   MainWindowでは、QDockWidgetのドックエリアが変わると
+   calledDockLocationChanged()でリサイズとスクロール方向をセットしています
+   また、QScroller::grabGesture()でタッチ操作によるスクロールを設定しています
+
+** 画面
+
+ [[file:TestGridQDockWidget.png]]
